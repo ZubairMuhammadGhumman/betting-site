@@ -1,9 +1,11 @@
 import React from 'react';
 import GameCard from './GameCard';
 import { Gamepad2 } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 import { useGames } from '../hooks/useApi';
 
 const GamesGrid: React.FC = () => {
+  const { t } = useLanguage();
   const { data: gamesData, loading, error } = useGames({ limit: 80 });
 
   if (loading) {
@@ -13,7 +15,7 @@ const GamesGrid: React.FC = () => {
           <div className="text-center mb-6">
             <div className="flex items-center justify-center space-x-2 mb-3">
               <Gamepad2 className="h-4 w-4 text-blue-300" />
-              <h2 className="text-lg font-medium text-white">Oyunlar</h2>
+              <h2 className="text-lg font-medium text-white">{t('gamesGrid.title')}</h2>
             </div>
           </div>
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-3 justify-items-center">
@@ -31,7 +33,7 @@ const GamesGrid: React.FC = () => {
       <section className="py-12 bg-black/5 backdrop-blur-sm" id="games">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <p className="text-red-400">Oyunlar yüklənərkən xəta baş verdi</p>
+            <p className="text-red-400">{t('error.gamesFailed')}</p>
           </div>
         </div>
       </section>
@@ -47,7 +49,7 @@ const GamesGrid: React.FC = () => {
         <div className="text-center mb-6">
           <div className="flex items-center justify-center space-x-2 mb-3">
             <Gamepad2 className="h-4 w-4 text-blue-300" />
-            <h2 className="text-lg font-medium text-white">Oyunlar</h2>
+            <h2 className="text-lg font-medium text-white">{t('gamesGrid.title')}</h2>
           </div>
         </div>
 

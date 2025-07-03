@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Play, Star } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const gamesOfTheDay = [
   {
     id: 1,
     name: "Mega Moolah",
-    description: "Ən böyük cekpotlu slot oyunu",
+    description: {
+      az: "Ən böyük cekpotlu slot oyunu",
+      en: "Biggest jackpot slot game"
+    },
     image: "/image copy.png",
     jackpot: "12.5M AZN",
     rtp: "96.5%"
@@ -13,22 +17,35 @@ const gamesOfTheDay = [
   {
     id: 2,
     name: "Lightning Roulette",
-    description: "Canlı diler ilə elektrikləşdirici rulet",
+    description: {
+      az: "Canlı diler ilə elektrikləşdirici rulet",
+      en: "Electrifying roulette with live dealer"
+    },
     image: "/image copy.png",
-    jackpot: "Canlı",
+    jackpot: {
+      az: "Canlı",
+      en: "Live"
+    },
     rtp: "97.3%"
   },
   {
     id: 3,
     name: "Sweet Bonanza",
-    description: "Şirin meyvələrlə dolu slot oyunu",
+    description: {
+      az: "Şirin meyvələrlə dolu slot oyunu",
+      en: "Sweet fruit-filled slot game"
+    },
     image: "/image copy.png",
-    jackpot: "Yeni",
+    jackpot: {
+      az: "Yeni",
+      en: "New"
+    },
     rtp: "96.5%"
   }
 ];
 
 const GameOfTheDay: React.FC = () => {
+  const { language, t } = useLanguage();
   const [currentGame, setCurrentGame] = useState(0);
 
   useEffect(() => {
@@ -55,7 +72,7 @@ const GameOfTheDay: React.FC = () => {
           <div className="text-white">
             <div className="flex items-center space-x-2 mb-3">
               <Star className="h-4 w-4 text-yellow-300 fill-current" />
-              <span className="text-yellow-300 font-medium">GÜNÜN OYUNU</span>
+              <span className="text-yellow-300 font-medium">{t('gameOfDay.title')}</span>
             </div>
             
             <h2 className="text-3xl lg:text-4xl font-semibold mb-3 leading-tight">
@@ -63,23 +80,25 @@ const GameOfTheDay: React.FC = () => {
             </h2>
             
             <p className="text-lg text-gray-100 mb-4 leading-relaxed font-light">
-              {game.description}
+              {typeof game.description === 'object' ? game.description[language] : game.description}
             </p>
             
             <div className="flex items-center space-x-6 mb-6">
               <div className="text-center">
-                <div className="text-xl font-semibold text-yellow-300">{game.jackpot}</div>
-                <div className="text-xs text-gray-300">Cekpot</div>
+                <div className="text-xl font-semibold text-yellow-300">
+                  {typeof game.jackpot === 'object' ? game.jackpot[language] : game.jackpot}
+                </div>
+                <div className="text-xs text-gray-300">{t('gameOfDay.jackpot')}</div>
               </div>
               <div className="text-center">
                 <div className="text-xl font-semibold text-green-300">{game.rtp}</div>
-                <div className="text-xs text-gray-300">RTP</div>
+                <div className="text-xs text-gray-300">{t('gameOfDay.rtp')}</div>
               </div>
             </div>
 
             <button className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 px-6 py-3 rounded-xl font-medium text-black transition-all transform hover:scale-105 hover:shadow-xl flex items-center space-x-2 shadow-lg">
               <Play className="h-4 w-4" />
-              <span>İndi Oyna</span>
+              <span>{t('gameOfDay.playNow')}</span>
             </button>
           </div>
 
@@ -95,7 +114,7 @@ const GameOfTheDay: React.FC = () => {
             
             {/* Floating badge */}
             <div className="absolute -top-2 -right-2 bg-yellow-400 text-black px-3 py-1 rounded-full font-medium animate-bounce shadow-lg text-sm">
-              🎰 İSTİ!
+              {t('gameOfDay.hot')}
             </div>
           </div>
         </div>

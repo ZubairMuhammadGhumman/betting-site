@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Trophy, User, Wallet, Globe, ChevronDown } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 import AuthModal from './AuthModal';
 import UserProfile from './UserProfile';
 import ApiService, { TokenManager } from '../services/api';
@@ -11,6 +12,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ onSearchClick, onPaymentClick }) => {
+  const { language, setLanguage, t } = useLanguage();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -18,7 +20,6 @@ const Header: React.FC<HeaderProps> = ({ onSearchClick, onPaymentClick }) => {
   const [user, setUser] = useState<any>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
-  const [language, setLanguage] = useState<'az' | 'en'>('az');
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
 
   // Use API hooks - only call balance if user is logged in
@@ -118,7 +119,7 @@ const Header: React.FC<HeaderProps> = ({ onSearchClick, onPaymentClick }) => {
               </div>
               <div>
                 <h1 className="text-xl font-semibold bg-gradient-to-r from-yellow-300 to-yellow-400 bg-clip-text text-transparent">
-                  QIZIL KAZİNO
+                  {t('footer.company')}
                 </h1>
               </div>
             </div>
@@ -129,7 +130,7 @@ const Header: React.FC<HeaderProps> = ({ onSearchClick, onPaymentClick }) => {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Oyun axtarın..."
+                  placeholder={t('header.search.placeholder')}
                   value={searchTerm}
                   onChange={(e) => {
                     setSearchTerm(e.target.value);
@@ -230,13 +231,13 @@ const Header: React.FC<HeaderProps> = ({ onSearchClick, onPaymentClick }) => {
                     onClick={() => handleAuthClick('login')}
                     className="bg-gradient-to-r from-yellow-400/90 to-yellow-500/90 hover:from-yellow-500/90 hover:to-yellow-600/90 backdrop-blur-sm px-5 py-2 rounded-xl font-medium text-black transition-all transform hover:scale-105 shadow-lg"
                   >
-                    Giriş
+                    {t('header.login')}
                   </button>
                   <button
                     onClick={() => handleAuthClick('register')}
                     className="bg-gradient-to-r from-green-500/80 to-green-600/80 hover:from-green-600/80 hover:to-green-700/80 backdrop-blur-sm px-5 py-2 rounded-xl font-medium text-white transition-all transform hover:scale-105 shadow-lg"
                   >
-                    Qeydiyyat
+                    {t('header.register')}
                   </button>
 
                   {/* Language Dropdown - Registration button sağında */}

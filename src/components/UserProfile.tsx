@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { User, LogOut, Settings, Wallet, Trophy, Gift, History, Star } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 import ApiService, { TokenManager } from '../services/api';
 import { useProfile, useBalance, usePaymentHistory } from '../hooks/useApi';
 
@@ -10,6 +11,7 @@ interface UserProfileProps {
 }
 
 const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose, onPaymentClick }) => {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState('profile');
   const [loading, setLoading] = useState(false);
 
@@ -48,15 +50,15 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose, onPaymentCli
 
   const getLevelName = (level: number) => {
     const levels = {
-      1: 'Yeni Başlayan',
-      2: 'Bronz',
-      3: 'Gümüş',
-      4: 'Qızıl',
-      6: 'Platin',
-      8: 'Almaz',
-      10: 'VIP'
+      1: t('level.beginner'),
+      2: t('level.bronze'),
+      3: t('level.silver'),
+      4: t('level.gold'),
+      6: t('level.platinum'),
+      8: t('level.diamond'),
+      10: t('level.vip')
     };
-    return levels[level as keyof typeof levels] || 'Yeni Başlayan';
+    return levels[level as keyof typeof levels] || t('level.beginner');
   };
 
   const getBalance = () => {
@@ -102,7 +104,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose, onPaymentCli
         <div className="bg-white/95 backdrop-blur-sm rounded-2xl w-full max-w-lg p-8">
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Profil yüklənir...</p>
+            <p className="text-gray-600">{t('error.profileLoading')}</p>
           </div>
         </div>
       </div>
@@ -127,7 +129,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose, onPaymentCli
               <div className="flex items-center space-x-2 mt-1">
                 <Star className="h-4 w-4 text-yellow-300 fill-current" />
                 <span className="text-blue-100 text-sm">
-                  Səviyyə {userLevel} - {getLevelName(userLevel)}
+                  {t('profile.level')} {userLevel} - {getLevelName(userLevel)}
                 </span>
               </div>
             </div>
@@ -144,7 +146,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose, onPaymentCli
                 : 'text-gray-500 hover:text-gray-700'
             }`}
           >
-            Profil
+            {t('profile.title')}
           </button>
           <button
             onClick={() => setActiveTab('history')}
@@ -154,7 +156,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose, onPaymentCli
                 : 'text-gray-500 hover:text-gray-700'
             }`}
           >
-            Tarixçə
+            {t('profile.history')}
           </button>
         </div>
 
@@ -166,7 +168,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose, onPaymentCli
               <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-lg border border-green-200">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">Balans</p>
+                    <p className="text-sm text-gray-600">{t('profile.balance')}</p>
                     <p className="text-2xl font-bold text-green-600">{formatAmount(getBalance())}</p>
                   </div>
                   <Wallet className="h-8 w-8 text-green-500" />
@@ -176,7 +178,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose, onPaymentCli
               {/* Level Progress */}
               <div className="bg-gradient-to-r from-purple-50 to-indigo-50 p-4 rounded-lg border border-purple-200">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-700">Səviyyə İrəliləyişi</span>
+                  <span className="text-sm font-medium text-gray-700">{t('profile.levelProgress')}</span>
                   <span className="text-sm text-purple-600">{userLevel}/10</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
@@ -191,11 +193,11 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose, onPaymentCli
               {user.totalDeposits !== undefined && (
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
-                    <p className="text-xs text-gray-600">Ümumi Depozit</p>
+                    <p className="text-xs text-gray-600">{t('profile.totalDeposits')}</p>
                     <p className="text-lg font-bold text-blue-600">{formatAmount(user.totalDeposits || 0)}</p>
                   </div>
                   <div className="bg-orange-50 p-3 rounded-lg border border-orange-200">
-                    <p className="text-xs text-gray-600">Ümumi Çıxarış</p>
+                    <p className="text-xs text-gray-600">{t('profile.totalWithdrawals')}</p>
                     <p className="text-lg font-bold text-orange-600">{formatAmount(user.totalWithdrawals || 0)}</p>
                   </div>
                 </div>
@@ -204,7 +206,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose, onPaymentCli
               {/* Settings */}
               <button className="w-full flex items-center space-x-3 p-3 hover:bg-gray-100 rounded-lg transition-colors">
                 <Settings className="h-5 w-5 text-gray-600" />
-                <span className="text-gray-700">Tənzimləmələr</span>
+                <span className="text-gray-700">{t('profile.settings')}</span>
               </button>
             </div>
           )}
@@ -218,7 +220,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose, onPaymentCli
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="font-medium text-gray-800">
-                            {transaction.type === 'deposit' ? 'Depozit' : 'Çıxarış'}
+                            {transaction.type === 'deposit' ? t('payment.deposit') : t('payment.withdraw')}
                           </p>
                           <p className="text-sm text-gray-600">
                             {transaction.paymentMethod.toUpperCase()}
@@ -238,8 +240,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose, onPaymentCli
                             transaction.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
                             'bg-red-100 text-red-700'
                           }`}>
-                            {transaction.status === 'completed' ? 'Tamamlandı' :
-                             transaction.status === 'pending' ? 'Gözləyir' : 'Uğursuz'}
+                            {transaction.status === 'completed' ? t('profile.completed') :
+                             transaction.status === 'pending' ? t('profile.pending') : t('profile.failed')}
                           </p>
                         </div>
                       </div>
@@ -249,8 +251,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose, onPaymentCli
               ) : (
                 <div className="text-center py-8">
                   <History className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-                  <h3 className="text-lg font-medium text-gray-500 mb-2">Tarixçə Boşdur</h3>
-                  <p className="text-gray-400 text-sm">Hələ heç bir əməliyyat yoxdur</p>
+                  <h3 className="text-lg font-medium text-gray-500 mb-2">{t('profile.emptyHistory')}</h3>
+                  <p className="text-gray-400 text-sm">{t('profile.noTransactions')}</p>
                 </div>
               )}
             </div>
@@ -265,14 +267,14 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose, onPaymentCli
             className="w-full flex items-center justify-center space-x-2 bg-red-500 hover:bg-red-600 disabled:bg-red-400 text-white py-3 rounded-lg font-semibold transition-colors"
           >
             <LogOut className="h-5 w-5" />
-            <span>{loading ? 'Çıxış edilir...' : 'Çıxış'}</span>
+            <span>{loading ? t('profile.loggingOut') : t('profile.logout')}</span>
           </button>
 
           <button
             onClick={onClose}
             className="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-lg font-semibold transition-colors"
           >
-            Bağla
+            {t('profile.close')}
           </button>
         </div>
       </div>

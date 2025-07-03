@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Mail, Lock, Eye, EyeOff, Zap, Info, AlertCircle } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 import ApiService, { TokenManager } from '../services/api';
 
 interface AuthModalProps {
@@ -10,6 +11,7 @@ interface AuthModalProps {
 }
 
 const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChange }) => {
+  const { t } = useLanguage();
   const [showPassword, setShowPassword] = useState(false);
   const [registrationType, setRegistrationType] = useState<'quick' | 'full'>('quick');
   const [formData, setFormData] = useState({
@@ -50,7 +52,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
       if (!validateEmail(value)) {
         setErrors(prev => ({
           ...prev,
-          email: 'E-mail formatı düzgün deyil'
+          email: t('error.emailInvalid')
         }));
       }
     }
@@ -59,7 +61,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
       if (value !== formData.password) {
         setErrors(prev => ({
           ...prev,
-          confirmPassword: 'Şifrələr uyğun gəlmir'
+          confirmPassword: t('error.passwordMismatch')
         }));
       }
     }
@@ -68,13 +70,13 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
       if (value.length < 6) {
         setErrors(prev => ({
           ...prev,
-          password: 'Şifrə minimum 6 simvol olmalıdır'
+          password: t('error.passwordMinLength')
         }));
       }
       if (formData.confirmPassword && value !== formData.confirmPassword) {
         setErrors(prev => ({
           ...prev,
-          confirmPassword: 'Şifrələr uyğun gəlmir'
+          confirmPassword: t('error.passwordMismatch')
         }));
       }
     }
@@ -97,7 +99,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
       onClose();
       window.location.reload();
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Qeydiyyat zamanı xəta baş verdi';
+      const errorMessage = error.response?.data?.message || t('error.registrationFailed');
       setErrors({ general: errorMessage });
     } finally {
       setLoading(false);
@@ -113,29 +115,29 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
       const newErrors: {[key: string]: string} = {};
       
       if (!formData.email) {
-        newErrors.email = 'E-mail tələb olunur';
+        newErrors.email = t('error.emailRequired');
       } else if (!validateEmail(formData.email)) {
-        newErrors.email = 'E-mail formatı düzgün deyil';
+        newErrors.email = t('error.emailInvalid');
       }
 
       if (!formData.nickname) {
-        newErrors.nickname = 'Nickname tələb olunur';
+        newErrors.nickname = t('error.nicknameRequired');
       }
 
       if (!formData.password) {
-        newErrors.password = 'Şifrə tələb olunur';
+        newErrors.password = t('error.passwordRequired');
       } else if (formData.password.length < 6) {
-        newErrors.password = 'Şifrə minimum 6 simvol olmalıdır';
+        newErrors.password = t('error.passwordMinLength');
       }
 
       if (!formData.confirmPassword) {
-        newErrors.confirmPassword = 'Şifrə təsdiqi tələb olunur';
+        newErrors.confirmPassword = t('error.passwordRequired');
       } else if (formData.password !== formData.confirmPassword) {
-        newErrors.confirmPassword = 'Şifrələr uyğun gəlmir';
+        newErrors.confirmPassword = t('error.passwordMismatch');
       }
 
       if (!formData.agreeTerms) {
-        newErrors.agreeTerms = 'Şərtləri qəbul etməlisiniz';
+        newErrors.agreeTerms = t('error.termsRequired');
       }
 
       if (Object.keys(newErrors).length > 0) {
@@ -159,7 +161,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
       onClose();
       window.location.reload();
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Qeydiyyat zamanı xəta baş verdi';
+      const errorMessage = error.response?.data?.message || t('error.registrationFailed');
       if (error.response?.data?.error?.details) {
         setErrors(error.response.data.error.details);
       } else {
@@ -176,7 +178,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
       setErrors({});
 
       if (!formData.email || !formData.password) {
-        setErrors({ general: 'E-mail və şifrə tələb olunur' });
+        setErrors({ general: t('error.emailRequired') + ' ' + t('error.passwordRequired') });
         return;
       }
 
@@ -193,7 +195,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
       onClose();
       window.location.reload();
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Giriş zamanı xəta baş verdi';
+      const errorMessage = error.response?.data?.message || t('error.loginFailed');
       setErrors({ general: errorMessage });
     } finally {
       setLoading(false);
@@ -208,7 +210,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-100">
           <h2 className="text-2xl font-semibold text-gray-800">
-            {mode === 'login' ? 'Giriş' : 'Qeydiyyat'}
+            {mode === 'login' ? t('auth.login.title') : t('auth.register.title')}
           </h2>
           <button
             onClick={onClose}
@@ -234,7 +236,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
             <div className="space-y-5">
               <div>
                 <label className="block text-sm font-medium text-gray-600 mb-2">
-                  E-mail
+                  {t('auth.email')}
                 </label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -244,7 +246,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
                     value={formData.email}
                     onChange={handleInputChange}
                     className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all text-gray-700"
-                    placeholder="E-mail ünvanınız"
+                    placeholder={t('auth.emailPlaceholder')}
                     disabled={loading}
                   />
                 </div>
@@ -252,7 +254,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
 
               <div>
                 <label className="block text-sm font-medium text-gray-600 mb-2">
-                  Şifrə
+                  {t('auth.password')}
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -262,7 +264,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
                     value={formData.password}
                     onChange={handleInputChange}
                     className="w-full pl-10 pr-12 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all text-gray-700"
-                    placeholder="Şifrəniz"
+                    placeholder={t('auth.passwordPlaceholder')}
                     disabled={loading}
                   />
                   <button
@@ -284,7 +286,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
                 disabled={loading}
                 className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 disabled:from-gray-400 disabled:to-gray-500 text-white py-3 rounded-xl font-medium transition-all transform hover:scale-[1.02] shadow-lg disabled:cursor-not-allowed"
               >
-                {loading ? 'Giriş edilir...' : 'Giriş Et'}
+                {loading ? t('common.loading') : t('auth.loginButton')}
               </button>
 
               <div className="text-center">
@@ -293,7 +295,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
                   className="text-blue-600 hover:text-blue-700 font-medium text-sm"
                   disabled={loading}
                 >
-                  Hesabınız yoxdur? Qeydiyyatdan keçin
+                  {t('auth.noAccount')}
                 </button>
               </div>
             </div>
@@ -313,7 +315,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
                 >
                   <div className="flex items-center justify-center space-x-2">
                     <Zap className="h-4 w-4" />
-                    <span>1-Klik</span>
+                    <span>{t('auth.quickRegister')}</span>
                   </div>
                 </button>
                 <button
@@ -325,7 +327,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
-                  Tam Qeydiyyat
+                  {t('auth.fullRegister')}
                 </button>
               </div>
 
@@ -335,12 +337,12 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
                   <div className="bg-green-50 p-6 rounded-2xl border border-green-200">
                     <Zap className="h-12 w-12 text-green-500 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                      1-Klik Qeydiyyat
+                      {t('auth.quickRegister')}
                     </h3>
                     <div className="flex items-start space-x-2 text-sm text-gray-600 mb-4">
                       <Info className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
                       <p className="text-left">
-                        Bu sürətli qeydiyyatdır. Bonus qazanmaq üçün tam qeydiyyatdan keçin.
+                        {t('auth.quickRegisterDesc')}
                       </p>
                     </div>
                   </div>
@@ -352,7 +354,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
                   >
                     <div className="flex items-center justify-center space-x-2">
                       <Zap className="h-5 w-5" />
-                      <span>{loading ? 'Qeydiyyat edilir...' : 'Dərhal Başla'}</span>
+                      <span>{loading ? t('common.loading') : t('auth.startNow')}</span>
                     </div>
                   </button>
                 </div>
@@ -362,7 +364,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
                   {/* Email */}
                   <div>
                     <label className="block text-sm font-medium text-gray-600 mb-2">
-                      E-mail *
+                      {t('auth.email')} *
                     </label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -374,7 +376,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
                         className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all text-gray-700 ${
                           errors.email ? 'border-red-300 bg-red-50' : 'border-gray-200'
                         }`}
-                        placeholder="E-mail ünvanınız"
+                        placeholder={t('auth.emailPlaceholder')}
                         required
                         disabled={loading}
                       />
@@ -390,7 +392,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
                   {/* Nickname */}
                   <div>
                     <label className="block text-sm font-medium text-gray-600 mb-2">
-                      Nickname *
+                      {t('auth.nickname')} *
                     </label>
                     <input
                       type="text"
@@ -400,7 +402,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
                       className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all text-gray-700 ${
                         errors.nickname ? 'border-red-300 bg-red-50' : 'border-gray-200'
                       }`}
-                      placeholder="Oyun adınız"
+                      placeholder={t('auth.nicknamePlaceholder')}
                       required
                       disabled={loading}
                     />
@@ -415,7 +417,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
                   {/* Password */}
                   <div>
                     <label className="block text-sm font-medium text-gray-600 mb-2">
-                      Şifrə *
+                      {t('auth.password')} *
                     </label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -427,7 +429,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
                         className={`w-full pl-10 pr-12 py-3 border rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all text-gray-700 ${
                           errors.password ? 'border-red-300 bg-red-50' : 'border-gray-200'
                         }`}
-                        placeholder="Şifrəniz (min 6 simvol)"
+                        placeholder={t('auth.passwordPlaceholder')}
                         required
                         disabled={loading}
                       />
@@ -454,7 +456,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
                   {/* Confirm Password */}
                   <div>
                     <label className="block text-sm font-medium text-gray-600 mb-2">
-                      Şifrəni Təsdiqlə *
+                      {t('auth.confirmPassword')} *
                     </label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -466,7 +468,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
                         className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all text-gray-700 ${
                           errors.confirmPassword ? 'border-red-300 bg-red-50' : 'border-gray-200'
                         }`}
-                        placeholder="Şifrəni təkrarlayın"
+                        placeholder={t('auth.confirmPasswordPlaceholder')}
                         required
                         disabled={loading}
                       />
@@ -484,8 +486,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
                     <div className="flex items-start space-x-2">
                       <Info className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
                       <div className="text-sm text-blue-700">
-                        <p className="font-medium mb-1">200 AZN Bonus qazanma şansı!</p>
-                        <p>Bonus çarxı 200 AZN-ə qədər qazanma şansı verir</p>
+                        <p className="font-medium mb-1">{t('auth.bonusInfo')}</p>
+                        <p>{t('auth.bonusDesc')}</p>
                       </div>
                     </div>
                   </div>
@@ -503,8 +505,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
                         disabled={loading}
                       />
                       <span className="text-sm text-gray-600">
-                        <a href="#" className="text-blue-600 hover:text-blue-700">İstifadə Şərtləri</a> və{' '}
-                        <a href="#" className="text-blue-600 hover:text-blue-700">Məxfilik Siyasəti</a> ilə razıyam *
+                        {t('auth.agreeTerms')} *
                       </span>
                     </label>
                     {errors.agreeTerms && (
@@ -520,7 +521,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
                     disabled={loading}
                     className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 disabled:from-gray-400 disabled:to-gray-500 text-white py-3 rounded-xl font-medium transition-all transform hover:scale-[1.02] shadow-lg disabled:cursor-not-allowed"
                   >
-                    {loading ? 'Qeydiyyat edilir...' : 'Tam Qeydiyyat'}
+                    {loading ? t('common.loading') : t('auth.fullRegister')}
                   </button>
                 </>
               )}
@@ -531,7 +532,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
                   className="text-blue-600 hover:text-blue-700 font-medium text-sm"
                   disabled={loading}
                 >
-                  Artıq hesabınız var? Giriş edin
+                  {t('auth.hasAccount')}
                 </button>
               </div>
             </div>

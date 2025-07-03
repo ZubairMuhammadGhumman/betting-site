@@ -1,5 +1,6 @@
 import React from 'react';
 import { Star, Zap, Trophy, DollarSign } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 import ApiService, { TokenManager } from '../services/api';
 
 interface Game {
@@ -21,6 +22,8 @@ interface GameCardProps {
 }
 
 const GameCard: React.FC<GameCardProps> = ({ game, size = 'medium' }) => {
+  const { t } = useLanguage();
+  
   const sizeClasses = {
     small: 'w-24 h-28',
     medium: 'w-28 h-32',
@@ -58,11 +61,15 @@ const GameCard: React.FC<GameCardProps> = ({ game, size = 'medium' }) => {
     return badges[game.category as keyof typeof badges] || 'bg-gray-500/20 text-gray-400 border-gray-400/30';
   };
 
+  const getCategoryText = () => {
+    return t(`category.${game.category}` as any) || game.category.toUpperCase();
+  };
+
   const handleGameLaunch = async () => {
     try {
       if (!TokenManager.isAuthenticated()) {
         // Show login modal or redirect to login
-        alert('Oyunu oynamaq üçün giriş etməlisiniz');
+        alert(t('error.loginRequired'));
         return;
       }
 
@@ -74,7 +81,7 @@ const GameCard: React.FC<GameCardProps> = ({ game, size = 'medium' }) => {
       }
     } catch (error: any) {
       console.error('Game launch error:', error);
-      const errorMessage = error.response?.data?.message || 'Oyun açılarkən xəta baş verdi';
+      const errorMessage = error.response?.data?.message || t('error.gameLoadFailed');
       alert(errorMessage);
     }
   };
@@ -101,7 +108,7 @@ const GameCard: React.FC<GameCardProps> = ({ game, size = 'medium' }) => {
               onClick={handleGameLaunch}
               className="bg-yellow-500 hover:bg-yellow-600 text-black px-2 py-1 rounded-lg font-bold transform scale-95 group-hover:scale-100 transition-transform text-xs"
             >
-              Oyna
+              {t('gamesGrid.play')}
             </button>
           </div>
 
@@ -111,10 +118,7 @@ const GameCard: React.FC<GameCardProps> = ({ game, size = 'medium' }) => {
               <div className={`flex items-center space-x-1 px-1.5 py-0.5 rounded-full border ${getCategoryBadge()} backdrop-blur-sm`}>
                 {getCategoryIcon()}
                 <span className="text-xs font-bold uppercase">
-                  {game.category === 'jackpot' ? 'JP' : 
-                   game.category === 'new' ? 'YENİ' :
-                   game.category === 'live' ? 'CANLI' :
-                   game.category === 'slots' ? 'SLOT' : 'MASA'}
+                  {getCategoryText()}
                 </span>
               </div>
             </div>
@@ -143,7 +147,7 @@ const GameCard: React.FC<GameCardProps> = ({ game, size = 'medium' }) => {
           {!game.isActive && (
             <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
               <span className="text-white text-xs font-bold bg-red-500 px-2 py-1 rounded">
-                Aktiv Deyil
+                {t('gamesGrid.inactive')}
               </span>
             </div>
           )}

@@ -1,9 +1,11 @@
 import React from 'react';
 import GameCard from './GameCard';
 import { Star } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 import { useFeaturedGames } from '../hooks/useApi';
 
 const FeaturedGames: React.FC = () => {
+  const { t } = useLanguage();
   const { data: featuredGames, loading, error } = useFeaturedGames();
 
   if (loading) {
@@ -13,7 +15,7 @@ const FeaturedGames: React.FC = () => {
           <div className="text-center mb-6">
             <div className="flex items-center justify-center space-x-2 mb-3">
               <Star className="h-4 w-4 text-yellow-300 fill-current" />
-              <h2 className="text-lg font-medium text-white">Seçilmiş Oyunlar</h2>
+              <h2 className="text-lg font-medium text-white">{t('featuredGames.title')}</h2>
             </div>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 justify-items-center">
@@ -31,7 +33,7 @@ const FeaturedGames: React.FC = () => {
       <section className="py-8 bg-black/5 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <p className="text-red-400">Seçilmiş oyunlar yüklənərkən xəta baş verdi</p>
+            <p className="text-red-400">{t('error.featuredGamesFailed')}</p>
           </div>
         </div>
       </section>
@@ -48,7 +50,7 @@ const FeaturedGames: React.FC = () => {
         <div className="text-center mb-6">
           <div className="flex items-center justify-center space-x-2 mb-3">
             <Star className="h-4 w-4 text-yellow-300 fill-current" />
-            <h2 className="text-lg font-medium text-white">Seçilmiş Oyunlar</h2>
+            <h2 className="text-lg font-medium text-white">{t('featuredGames.title')}</h2>
           </div>
         </div>
 
