@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LanguageProvider } from './contexts/LanguageContext';
 import Header from './components/Header';
 import GameOfTheDay from './components/GameOfTheDay';
@@ -9,17 +9,58 @@ import SearchModal from './components/SearchModal';
 import ChatWidget from './components/ChatWidget';
 import Footer from './components/Footer';
 import PaymentModal from './components/PaymentModal';
+import Dashboard from './components/Dashboard';
+import { TokenManager } from './services/api';
 
 function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
   const [paymentType, setPaymentType] = useState<'deposit' | 'withdraw'>('deposit');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Check if user is logged in
+    const checkLoginStatus = () => {
+      const loginStatus = localStorage.getItem('isLoggedIn');
+      const hasToken = TokenManager.isAuthenticated();
+      setIsLoggedIn(loginStatus === 'true' && hasToken);
+    };
+
+    checkLoginStatus();
+
+    // Listen for storage changes (when user logs in/out)
+    const handleStorageChange = () => {
+      checkLoginStatus();
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Also listen for custom login events
+    window.addEventListener('userLoggedIn', handleStorageChange);
+    window.addEventListener('userLoggedOut', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('userLoggedIn', handleStorageChange);
+      window.removeEventListener('userLoggedOut', handleStorageChange);
+    };
+  }, []);
 
   const handlePaymentOpen = (type: 'deposit' | 'withdraw') => {
     setPaymentType(type);
     setIsPaymentOpen(true);
   };
 
+  // If user is logged in, show dashboard
+  if (isLoggedIn) {
+    return (
+      <LanguageProvider>
+        <Dashboard />
+      </LanguageProvider>
+    );
+  }
+
+  // If user is not logged in, show home page
   return (
     <LanguageProvider>
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">

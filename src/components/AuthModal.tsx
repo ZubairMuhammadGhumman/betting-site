@@ -97,6 +97,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
       localStorage.setItem('isLoggedIn', 'true');
 
       onClose();
+      
+      // Trigger custom event to notify App component
+      window.dispatchEvent(new Event('userLoggedIn'));
+      
+      // Force page reload to show dashboard
       window.location.reload();
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || t('error.registrationFailed');
@@ -159,6 +164,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
       localStorage.setItem('isLoggedIn', 'true');
 
       onClose();
+      
+      // Trigger custom event to notify App component
+      window.dispatchEvent(new Event('userLoggedIn'));
+      
+      // Force page reload to show dashboard
       window.location.reload();
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || t('error.registrationFailed');
@@ -193,6 +203,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
       localStorage.setItem('isLoggedIn', 'true');
 
       onClose();
+      
+      // Trigger custom event to notify App component
+      window.dispatchEvent(new Event('userLoggedIn'));
+      
+      // Force page reload to show dashboard
       window.location.reload();
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || t('error.loginFailed');
