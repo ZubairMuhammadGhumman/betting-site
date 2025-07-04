@@ -93,6 +93,7 @@ const Dashboard: React.FC = () => {
         <Header 
           onSearchClick={() => setIsSearchOpen(true)} 
           onPaymentClick={handlePaymentOpen}
+          showOnlyLanguageDropdown={true}
         />
         <GameOfTheDay />
         <WinnerTicker />
