@@ -326,7 +326,7 @@ const Header: React.FC<HeaderProps> = ({
                       onClick={() => setShowProfileDropdown((v) => !v)}
                     >
                       <img
-                        src="/public/profile.png"
+                        src="/profile.png"
                         className="h-10 w-10"
                         alt="user avatar"
                         data-v-1775bd24=""
@@ -357,7 +357,7 @@ const Header: React.FC<HeaderProps> = ({
                           className="flex items-center gap-3 px-5 py-3 hover:bg-white/10 transition text-base font-medium text-white text-left"
                           onClick={() => navigate("/withdraws")}
                         >
-                          {/* Gear icon */}
+                          {/* Withdrawal icon */}
                           <svg
                             className="h-5 w-5 text-white"
                             fill="none"
@@ -365,17 +365,16 @@ const Header: React.FC<HeaderProps> = ({
                             strokeWidth="2"
                             viewBox="0 0 24 24"
                           >
-                            <circle cx="12" cy="12" r="3.5" />
                             <path
                               strokeLinecap="round"
                               strokeLinejoin="round"
-                              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
+                              d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                             />
                           </svg>
                           Withdrawals
                         </button>
                         <button className="flex items-center gap-3 px-5 py-3 hover:bg-white/10 transition text-base font-medium text-white text-left">
-                          {/* Gear icon */}
+                          {/* Deposit icon */}
                           <svg
                             className="h-5 w-5 text-white"
                             fill="none"
@@ -383,11 +382,10 @@ const Header: React.FC<HeaderProps> = ({
                             strokeWidth="2"
                             viewBox="0 0 24 24"
                           >
-                            <circle cx="12" cy="12" r="3.5" />
                             <path
                               strokeLinecap="round"
                               strokeLinejoin="round"
-                              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
+                              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                             />
                           </svg>
                           Deposits
