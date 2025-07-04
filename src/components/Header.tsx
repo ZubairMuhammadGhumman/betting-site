@@ -355,7 +355,7 @@ const Header: React.FC<HeaderProps> = ({
                         </button>
                         <button
                           className="flex items-center gap-3 px-5 py-3 hover:bg-white/10 transition text-base font-medium text-white text-left"
-                          onClick={() => navigate("/withdrawals")}
+                          onClick={() => navigate("/withdraws")}
                         >
                           {/* Gear icon */}
                           <svg

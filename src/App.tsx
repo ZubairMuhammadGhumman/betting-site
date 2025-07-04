@@ -169,7 +169,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/withdrawals" element={<WithdrawalsPage />} />
+        <Route path="/withdraws" element={<WithdrawalsPage />} />
       </Routes>
     </LanguageProvider>
   );
