@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { LanguageProvider } from "./contexts/LanguageContext";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Header from "./components/Header";
 import GameOfTheDay from "./components/GameOfTheDay";
 import WinnerTicker from "./components/WinnerTicker";
@@ -11,6 +11,7 @@ import ChatWidget from "./components/ChatWidget";
 import Footer from "./components/Footer";
 import PaymentModal from "./components/PaymentModal";
 import Dashboard from "./components/Dashboard";
+import WithdrawalsPage from "./components/WithdrawalsPage";
 
 function HomePage() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -18,6 +19,17 @@ function HomePage() {
   const [paymentType, setPaymentType] = useState<"deposit" | "withdraw">(
     "deposit"
   );
+  const location = useLocation();
+
+  // Check if we should open withdrawal modal from navigation state
+  useEffect(() => {
+    if (location.state?.openWithdrawal) {
+      setPaymentType("withdraw");
+      setIsPaymentOpen(true);
+      // Clear the state
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   const handlePaymentOpen = (type: "deposit" | "withdraw") => {
     setPaymentType(type);
@@ -147,14 +159,6 @@ function HomePage() {
         />
         <ChatWidget />
       </div>
-    </div>
-  );
-}
-
-function WithdrawalsPage() {
-  return (
-    <div className="min-h-screen flex items-center justify-center text-3xl text-white bg-slate-900">
-      Withdrawals Page (Under Construction)
     </div>
   );
 }
